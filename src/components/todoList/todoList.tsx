@@ -1,4 +1,5 @@
 import React from "react";
+import classes from "./todoList.module.css";
 
 interface TotoItem {
   title: string;
@@ -6,7 +7,7 @@ interface TotoItem {
 }
 
 const todos: TotoItem[] = [
-  { id: "1", title: "Deed dog" },
+  { id: "1", title: "Feed dog" },
   { id: "2", title: "Go for walk" },
 ];
 
@@ -15,7 +16,12 @@ const TodoList = () => {
     <div>
       <ul>
         {todos.map((todoItem) => (
-          <li key={todoItem.id}>{todoItem.title}</li>
+          <li className={classes.list} key={todoItem.id}>
+            <input type="checkbox"></input>
+            <label for={todoItem.title} contentEditable>
+              {todoItem.title}
+            </label>
+          </li>
         ))}
       </ul>
     </div>
