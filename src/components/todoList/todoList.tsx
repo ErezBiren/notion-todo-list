@@ -1,10 +1,6 @@
 import React from "react";
 import classes from "./todoList.module.css";
-
-interface TotoItem {
-  title: string;
-  id: string;
-}
+import { TotoItem } from "../../models";
 
 const todos: TotoItem[] = [
   { id: "1", title: "Feed dog" },
