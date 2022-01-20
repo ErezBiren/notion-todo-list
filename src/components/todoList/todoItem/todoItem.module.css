@@ -1,0 +1,41 @@
+.hidden {
+  text-decoration: line-through;
+  visibility: none;
+  opacity: 0;
+  transition: visibility 1s 1s, opacity 2s linear;
+  cursor: pointer;
+}
+
+.listIem {
+  /* background: red; */
+  height: 30px;
+  padding: 3px;
+  width: 50%;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+}
+
+.listIem:hover {
+  background: #dfe6ed;
+}
+
+.listIem input {
+  border: 2 solid #dfe6ed;
+  cursor: pointer;
+}
+
+.listIemDeleted {
+  background-color: #8dd7cf;
+}
+
+.listIem input:checked {
+  background-color: red;
+}
+
+.detailsIcon {
+  width: 20px;
+  height: 10px;
+  background-color: grey;
+}
