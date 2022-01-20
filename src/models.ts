@@ -1,4 +1,5 @@
-interface TotoItem {
-    title: string;
-    id: string;
+interface TodoItemModel {
+  id: string;
+  title: string;
+  description?: string;
 }
