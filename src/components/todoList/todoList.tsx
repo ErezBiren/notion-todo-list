@@ -2,6 +2,7 @@ import React from "react";
 import classes from "./todoList.module.css";
 import { TodoItemModel } from "../../models";
 import TodoItem from "./todoItem/todoItem";
+import AddTaskButton from "./addTaskButton/addTaskButton";
 
 const todos: TodoItemModel[] = [
   { id: "1", title: "Feed dog" },
@@ -11,6 +12,10 @@ const todos: TodoItemModel[] = [
 
 const handleDeleteItem = () => {
   console.log("deleted");
+};
+
+const handleAddTask = () => {
+  // add task to mobx
 };
 
 const TodoList = () => {
@@ -25,6 +30,7 @@ const TodoList = () => {
           ></TodoItem>
         ))}
       </ul>
+      <AddTaskButton handleAddTask={handleAddTask}></AddTaskButton>
     </div>
   );
 };

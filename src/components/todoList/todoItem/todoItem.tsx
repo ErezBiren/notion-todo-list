@@ -2,18 +2,18 @@ import React, { useEffect, useRef } from "react";
 import classes from "./TodoItem.module.css";
 import tinykeys from "tinykeys";
 
-interface TotoItemProps {
+interface TodoItemProps {
   todoItem: TodoItemModel;
   handleDeleteItem: () => void;
 }
 
-const TodoItem = ({ todoItem, handleDeleteItem }: TotoItemProps) => {
+const TodoItem = ({ todoItem, handleDeleteItem }: TodoItemProps) => {
   const [isShow, setShow] = React.useState(true);
 
   const lblRef = useRef(null);
 
   useEffect(() => {
-    console.log(lblRef.current);
+    console.log(lblRef.current); 
 
     tinykeys(lblRef.current, {
       Backspace: () => {
