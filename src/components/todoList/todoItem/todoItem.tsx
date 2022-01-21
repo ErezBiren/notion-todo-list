@@ -2,23 +2,14 @@ import React, { useEffect, useRef } from "react";
 import classes from "./TodoItem.module.css";
 import tinykeys from "tinykeys";
 
-interface TodoItemProps {
-  todoItem: TodoItemModel;
-  handleDeleteItem: () => void;
-}
-
-const TodoItem = ({ todoItem, handleDeleteItem }: TodoItemProps) => {
+const TodoItem = ({ todoItem, handleDeleteItem }) => {
   const [isShow, setShow] = React.useState(true);
 
   const lblRef = useRef(null);
 
   useEffect(() => {
-    console.log(lblRef.current); 
-
     tinykeys(lblRef.current, {
-      Backspace: () => {
-        console.log(lblRef);
-      },
+      Backspace: () => {},
     });
   }, []);
 
@@ -27,14 +18,14 @@ const TodoItem = ({ todoItem, handleDeleteItem }: TodoItemProps) => {
   };
 
   return (
-    <li className={!isShow && classes.hidden}>
+    <li className={`${!isShow && classes.hidden}`}>
       <div
         className={`${classes.listIem} ${!isShow && classes.listIemDeleted}`}
       >
         <input
           type="checkbox"
           onChange={handleDoneCheckbox}
-          onTransitionEnd={handleDeleteItem}
+          
         ></input>
         <label contentEditable ref={lblRef}>
           {todoItem.title}
