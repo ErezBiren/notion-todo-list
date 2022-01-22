@@ -9,7 +9,11 @@ const TodoDetails = ({ handleClose }) => {
 
   return (
     <div className={classes.detail}>
-      <Card showCloseButton handleClose={handleClose} title={todoStore.selectedTodo()?.title}>
+      <Card
+        showCloseButton
+        handleClose={handleClose}
+        title={todoStore.selectedTodo()?.title}
+      >
         {todoStore.selectedTodo()?.description}
       </Card>
     </div>
