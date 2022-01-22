@@ -1,21 +1,25 @@
-import React from "react";
+import React, { useEffect } from "react";
 import classes from "./todoList.module.css";
 import TodoItem from "./todoItem/todoItem";
 import AddTaskButton from "./addTaskButton/addTaskButton";
-import { observer } from "mobx-react";
 import { useTodosStore } from "../../models/todosStore";
-
-// const todos: TodoItemModel[] = [
-//   { id: "1", title: "Feed dog" },
-//   { id: "2", title: "Go for walk" },
-//   { id: "3", title: "Write essay", description: "- electric -water" },
-// ];
+import { observer } from "mobx-react-lite";
 
 const TodoList = () => {
   const todoStore = useTodosStore();
 
-  const handleDeleteItem = (todoID) => {
-    todoStore.deleteTodo(todoID);
+  useEffect(() => {
+    console.dir(todoStore.todos);
+  }, [todoStore]);
+
+  const handleDeleteItem = (todoID: string) => {
+    todoStore.fetchDelete(todoID);
+  };
+
+  const handleSelected = (todoID: string) => {
+    console.log(111);
+
+    todoStore.setSelectedTodo(todoID);
   };
 
   const handleAddTask = () => {
@@ -29,7 +33,8 @@ const TodoList = () => {
           <div key={todoItem.id}>
             <TodoItem
               todoItem={todoItem}
-              handleDeleteItem={handleDeleteItem}
+              handleSelected={handleSelected}
+              handleDelete={handleDeleteItem}
             ></TodoItem>
           </div>
         ))}

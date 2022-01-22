@@ -1,6 +1,5 @@
 import React from "react";
 import classes from "./card.module.css";
-import { ReactComponent as CloseIcon } from "../../assets/close.svg";
 
 interface CardProps {
   handleClose?: () => void;
@@ -11,12 +10,7 @@ interface CardProps {
 const Card = ({ children, showCloseButton, handleClose }: CardProps) => {
   return (
     <div className={classes.root}>
-      {showCloseButton && (
-        <button onClick={handleClose}>
-          {/* <CloseIcon width="125" height="125" /> */}
-          close
-        </button>
-      )}
+      {showCloseButton && <button onClick={handleClose}>close</button>}
       {children}
     </div>
   );

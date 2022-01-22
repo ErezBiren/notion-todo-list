@@ -1,5 +1,7 @@
 import { types, destroy } from "mobx-state-tree";
 
+const BASE_URL = 'http://localhost:3000/';
+
 export const TodoModel = types
     .model("Todo", {
         id: types.string,
@@ -29,15 +31,15 @@ export const TodosStore = types
             store.todos = newTodos;
         },
         async fetchTodos() {
-            const response = await fetch('../../assets/mockServer.json');
+            const response = await fetch(`${BASE_URL}todos`);
             const data = await response.json();
-            const newTodos = data.todos.map(todo => ({
+
+            const newTodos = data.map(todo => ({
                 id: todo.id,
                 title: todo.title,
-                description: todo.description
+                description: todo.description ? todo.description : ""
             }))
-
-            //store.setTodos(newTodos);
+            store.setTodos(newTodos);
         },
         addTodo({ id, title, description }): void {
             store.todos.push({ id, title, description });
@@ -45,7 +47,22 @@ export const TodosStore = types
         setSelectedTodo(id): void {
             store.selectedTodoId = id;
         },
-        deleteTodo(id): void {
+        async fetchDelete(id) {
+            const response = await fetch(`${BASE_URL}todos\\${id}`,
+                {
+                    method: 'DELETE',
+                });
+
+            if (!response.ok) {
+                alert("delete failed");
+                console.log(666);
+
+                return;
+            }
+
+            store.deleteTodo(id);
+        },
+        deleteTodo(id) {
             const todo = store.todos.find(todo => todo.id === id);
             if (todo) destroy(todo);
         }
@@ -55,12 +72,8 @@ let todosStore;
 export const useTodosStore = () => {
     if (!todosStore)
         todosStore = TodosStore.create({
-            todos: [
-                { id: "1", title: "Feed dog" },
-                { id: "2", title: "Go for walk" },
-                { id: "3", title: "Write essay", description: "- electric -water" },
-            ],
-            selectedTodoId: "3",
+            todos: [],
+            selectedTodoId: "",
         });
 
     return todosStore;
