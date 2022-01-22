@@ -14,19 +14,15 @@ const TodoDetails = ({ handleClose }) => {
   }, [todoStore.selectedTodo()]);
 
   const handleChange = (event) => {
-    todoStore.updateDescription(
-      todo.id,
-      event.currentTarget.textContent
-    );
+    todoStore.updateDescription({
+      ...todo,
+      description: event.currentTarget.textContent,
+    });
   };
 
   return (
     <div className={classes.detail}>
-      <Card
-        showCloseButton
-        handleClose={handleClose}
-        title={todo?.title}
-      >
+      <Card showCloseButton handleClose={handleClose} title={todo?.title}>
         <div
           contentEditable
           onInput={handleChange}

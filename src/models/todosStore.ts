@@ -59,17 +59,20 @@ export const TodosStore = types
         setSelectedTodo(id): void {
             store.selectedTodoId = id;
         },
-        async updateDescription(id, description) {
+        async update(updatedTodo) {
 
-            const todo = store.todos.find(todo => todo.id === id);
-            const response = await axios.put(`${BASE_URL}todos\\${id}`, { ...todo, description })
+            const response = await axios.put(`${BASE_URL}todos\\${updatedTodo.id}`, updatedTodo)
 
             if (response.status != 200) {
                 alert("update failed");
                 return;
             }
 
-            todo.description = description;
+            store.updateTodoInStore(updatedTodo);
+        },
+        updateTodoInStore(updatedTodo) {
+            let todo = store.todos.find(todo => todo.id === updatedTodo.id);
+            todo = { ...updatedTodo };
         },
         async fetchDelete(id) {
 
@@ -79,8 +82,6 @@ export const TodosStore = types
 
             if (response.status !== 200) {
                 alert("delete failed");
-                console.log(666);
-
                 return;
             }
 

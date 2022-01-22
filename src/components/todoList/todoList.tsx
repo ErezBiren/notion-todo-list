@@ -29,7 +29,7 @@ const TodoList = () => {
           </div>
         ))}
       </ul>
-      <AddTaskButton></AddTaskButton>
+      <AddTaskButton />
     </div>
   );
 };
