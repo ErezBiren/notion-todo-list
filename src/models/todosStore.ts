@@ -22,7 +22,7 @@ export const TodosStore = types
     })
     .views(self => ({
         selectedTodo() {
-            return self.todos.filter(todo => todo.id === self.selectedTodoId);
+            return self.todos.find(todo => todo.id === self.selectedTodoId);
         }
     }
     ))

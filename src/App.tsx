@@ -26,9 +26,8 @@ function App() {
   return (
     <div className={classes.main}>
       <div className={classes.master}>
-        <Card>
+        <Card title="My Todo List">
           <div>
-            <h2 contentEditable>My Todo List</h2>
             <TodoList></TodoList>
           </div>
         </Card>

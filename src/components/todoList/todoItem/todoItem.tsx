@@ -40,7 +40,7 @@ const TodoItem = ({
   return (
     <li className={`${!isShow && classes.hidden}`}>
       <div
-        click={console.log(444)}
+        onClick={HandleClick}
         className={`${classes.listIem} ${!isShow && classes.listIemDeleted}`}
       >
         <input type="checkbox" onChange={handleDoneCheckbox}></input>

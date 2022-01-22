@@ -8,17 +8,11 @@ import { observer } from "mobx-react-lite";
 const TodoList = () => {
   const todoStore = useTodosStore();
 
-  useEffect(() => {
-    console.dir(todoStore.todos);
-  }, [todoStore]);
-
   const handleDeleteItem = (todoID: string) => {
     todoStore.fetchDelete(todoID);
   };
 
   const handleSelected = (todoID: string) => {
-    console.log(111);
-
     todoStore.setSelectedTodo(todoID);
   };
 

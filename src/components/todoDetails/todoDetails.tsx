@@ -5,12 +5,12 @@ import Card from "../card/card";
 import classes from "./todoDetails.module.css";
 
 const TodoDetails = ({ handleClose }) => {
-  
   const todoStore = useTodosStore();
+
   return (
     <div className={classes.detail}>
-      <Card showCloseButton handleClose={handleClose}>
-        {todoStore.selectedTodo}
+      <Card showCloseButton handleClose={handleClose} title={todoStore.selectedTodo()?.title}>
+        {todoStore.selectedTodo()?.description}
       </Card>
     </div>
   );

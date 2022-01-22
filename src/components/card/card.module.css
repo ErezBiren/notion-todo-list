@@ -2,4 +2,11 @@
   margin: 10%;
   height: 100%;
   background-color: none;
+  position: relative;
+}
+
+.closeIcon {
+  position: absolute;
+  top: 0px;
+  right: 0px;
 }
