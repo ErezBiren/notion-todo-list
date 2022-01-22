@@ -17,6 +17,7 @@ const Card = ({ title, children, showCloseButton, handleClose }: CardProps) => {
       {showCloseButton && (
         <CloseIcon onClick={handleClose} className={classes.closeIcon} />
       )}
+
       {children}
     </div>
   );

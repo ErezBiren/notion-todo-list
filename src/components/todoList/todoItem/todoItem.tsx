@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import classes from "./TodoItem.module.css";
 import tinykeys from "tinykeys";
+import DetailsIcon from "../../../assets/details.svg?component";
 
 const DELAY_BEFORE_DELETE = 1500;
 
@@ -47,7 +48,9 @@ const TodoItem = ({
         <label contentEditable ref={lblRef}>
           {todoItem.title}
         </label>
-        {todoItem.description && <div className={classes.detailsIcon}></div>}
+        {todoItem.description && (
+          <DetailsIcon></DetailsIcon>
+        )}
       </div>
     </li>
   );

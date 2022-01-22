@@ -1,4 +1,5 @@
 import { types, destroy } from "mobx-state-tree";
+import axios from 'axios';
 
 const BASE_URL = 'http://localhost:3000/';
 
@@ -20,9 +21,9 @@ export const TodosStore = types
         todos: types.array(TodoModel),
         selectedTodoId: types.maybeNull(types.string)
     })
-    .views(self => ({
+    .views(store => ({
         selectedTodo() {
-            return self.todos.find(todo => todo.id === self.selectedTodoId);
+            return store.todos.find(todo => todo.id === store.selectedTodoId);
         }
     }
     ))
@@ -31,8 +32,8 @@ export const TodosStore = types
             store.todos = newTodos;
         },
         async fetchTodos() {
-            const response = await fetch(`${BASE_URL}todos`);
-            const data = await response.json();
+            const response = await axios.get(`${BASE_URL}todos`);
+            const data = await response.data;
 
             const newTodos = data.map(todo => ({
                 id: todo.id,
@@ -41,28 +42,51 @@ export const TodosStore = types
             }))
             store.setTodos(newTodos);
         },
-        addTodo({ id, title, description }): void {
-            store.todos.push({ id, title, description });
+        async addTodo(todo) {
+
+            const response = await axios.post(`${BASE_URL}todos/`, todo);
+
+            if (response.status !== 201) {
+                alert("add failed");
+                return;
+            }
+
+            store.addTodoToStore(todo);
+        },
+        addTodoToStore(todo) {
+            store.todos.push(todo);
         },
         setSelectedTodo(id): void {
             store.selectedTodoId = id;
         },
-        async fetchDelete(id) {
-            const response = await fetch(`${BASE_URL}todos\\${id}`,
-                {
-                    method: 'DELETE',
-                });
+        async updateDescription(id, description) {
 
-            if (!response.ok) {
+            const todo = store.todos.find(todo => todo.id === id);
+            const response = await axios.put(`${BASE_URL}todos\\${id}`, { ...todo, description })
+
+            if (response.status != 200) {
+                alert("update failed");
+                return;
+            }
+
+            todo.description = description;
+        },
+        async fetchDelete(id) {
+
+            const response = await axios.delete(`${BASE_URL}todos\\${id}`);
+
+            console.log(response.status);
+
+            if (response.status !== 200) {
                 alert("delete failed");
                 console.log(666);
 
                 return;
             }
 
-            store.deleteTodo(id);
+            store.deleteTodoFromStore(id);
         },
-        deleteTodo(id) {
+        deleteTodoFromStore(id) {
             const todo = store.todos.find(todo => todo.id === id);
             if (todo) destroy(todo);
         }

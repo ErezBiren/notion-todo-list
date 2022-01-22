@@ -16,10 +16,6 @@ const TodoList = () => {
     todoStore.setSelectedTodo(todoID);
   };
 
-  const handleAddTask = () => {
-    // add task to mobx
-  };
-
   return (
     <div>
       <ul className={classes.ul}>
@@ -33,7 +29,7 @@ const TodoList = () => {
           </div>
         ))}
       </ul>
-      <AddTaskButton handleAddTask={handleAddTask}></AddTaskButton>
+      <AddTaskButton></AddTaskButton>
     </div>
   );
 };
