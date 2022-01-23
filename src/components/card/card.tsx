@@ -7,12 +7,20 @@ interface CardProps {
   showCloseButton?: boolean;
   children: React.ReactNode;
   title: string;
+  titleContent?: React.ReactNode;
 }
 
-const Card = ({ title, children, showCloseButton, handleClose }: CardProps) => {
+const Card = ({
+  title,
+  titleContent,
+  children,
+  showCloseButton,
+  handleClose,
+}: CardProps) => {
   return (
     <div className={classes.root}>
-      <h2>{title}</h2>
+      {titleContent}
+      {title && <h2>{title}</h2>}
 
       {showCloseButton && (
         <CloseIcon onClick={handleClose} className={classes.closeIcon} />
