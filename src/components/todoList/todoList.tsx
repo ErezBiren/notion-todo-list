@@ -3,7 +3,7 @@ import classes from "./todoList.module.css";
 import TodoItem from "./todoItem/todoItem";
 import AddTaskButton from "./addTaskButton/addTaskButton";
 import { useTodosStore } from "../../models/todosStore";
-import { observer } from "mobx-react-lite";
+import { observer } from "mobx-react";
 
 const TodoList = () => {
   const todoStore = useTodosStore();
