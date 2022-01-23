@@ -1,4 +1,6 @@
+import { autorun } from "mobx";
 import { observer } from "mobx-react";
+
 import React, { useState, useEffect } from "react";
 import { useTodosStore } from "../../models/todosStore";
 import Card from "../card/card";
@@ -7,14 +9,15 @@ import classes from "./todoDetails.module.css";
 const TodoDetails = ({ handleClose }) => {
   const todoStore = useTodosStore();
 
-  const [todo, setTodo] = useState();
-
-  useEffect(() => {
-    setTodo(todoStore.selectedTodo());
-  }, [todoStore.selectedTodo()]);
+  autorun(() => {
+    console.log(888);
+    console.log(todoStore.selectedTodo);
+  });
 
   const handleChange = (event) => {
-    todoStore.updateDescription({
+    let todo = todoStore.selectedTodo;
+
+    todoStore.update({
       ...todo,
       description: event.currentTarget.textContent,
     });
@@ -22,13 +25,17 @@ const TodoDetails = ({ handleClose }) => {
 
   return (
     <div className={classes.detail}>
-      <Card showCloseButton handleClose={handleClose} title={todo?.title}>
+      <Card
+        showCloseButton
+        handleClose={handleClose}
+        title={todoStore.selectedTodo?.title}
+      >
         <div
           contentEditable
           onInput={handleChange}
           className={classes.detailsEditor}
         >
-          {todo?.description}
+          {todoStore.selectedTodo?.description}
         </div>
       </Card>
     </div>
