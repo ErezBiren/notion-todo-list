@@ -3,6 +3,8 @@ import classes from "./TodoItem.module.css";
 import tinykeys from "tinykeys";
 import DetailsIcon from "../../../assets/details.svg?component";
 import { useTodosStore } from "../../../models/todosStore";
+import { observer } from "mobx-react";
+import { v4 as uuidv4 } from "uuid";
 
 const DELAY_BEFORE_DELETE = 1500;
 
@@ -24,7 +26,19 @@ const TodoItem = ({
 
   useEffect(() => {
     tinykeys(lblRef.current, {
-      Backspace: () => {},
+      Backspace: () => {
+        console.log(lblRef.current);
+        if (lblRef.current.innerText == "") {
+          handleDelete(todoItem.id);
+        }
+      },
+      Enter: () => {
+        console.log(111);
+
+        const newTodo = { id: uuidv4(), title: "" };
+        todoStore.addTodo(newTodo);
+        console.log(444);
+      },
     });
   }, []);
 
@@ -54,10 +68,10 @@ const TodoItem = ({
         <label contentEditable ref={lblRef} onInput={handleChange}>
           {todoItem.title}
         </label>
-        {todoItem.description && <DetailsIcon></DetailsIcon>}
+        {todoItem.description != "" && <DetailsIcon></DetailsIcon>}
       </div>
     </li>
   );
 };
 
-export default TodoItem;
+export default observer(TodoItem);
