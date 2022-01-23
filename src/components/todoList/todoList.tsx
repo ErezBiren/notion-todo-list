@@ -20,13 +20,13 @@ const TodoList = () => {
     <div>
       <ul className={classes.ul}>
         {todoStore.todos.map((todoItem) => (
-          <div key={todoItem.id}>
+          <li key={todoItem.id}>
             <TodoItem
               todoItem={todoItem}
               handleSelected={handleSelected}
               handleDelete={handleDeleteItem}
             ></TodoItem>
-          </div>
+          </li>
         ))}
       </ul>
       <AddTaskButton />
