@@ -32,12 +32,11 @@ const TodoItem = ({
           handleDelete(todoItem.id);
         }
       },
-      Enter: () => {
-        console.log(111);
+      Enter: (event) => {
+        event.preventDefault();
 
         const newTodo = { id: uuidv4(), title: "" };
         todoStore.addTodo(newTodo);
-        console.log(444);
       },
     });
   }, []);
@@ -59,7 +58,7 @@ const TodoItem = ({
   };
 
   return (
-    <li className={`${!isShow && classes.hidden}`}>
+    <div className={`${!isShow && classes.hidden}`}>
       <div
         onClick={HandleClick}
         className={`${classes.listIem} ${!isShow && classes.listIemDeleted}`}
@@ -70,7 +69,7 @@ const TodoItem = ({
         </label>
         {todoItem.description != "" && <DetailsIcon></DetailsIcon>}
       </div>
-    </li>
+    </div>
   );
 };
 
