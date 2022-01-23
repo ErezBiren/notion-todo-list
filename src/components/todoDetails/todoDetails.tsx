@@ -9,20 +9,19 @@ const TodoDetails = ({ handleClose }) => {
   const todoStore = useTodosStore();
 
   const descriptionChanged = (event) => {
-    let todo = todoStore.selectedTodo;
-
-    todoStore.update({
-      ...todo,
-      description: event.currentTarget.textContent,
-    });
+    update("description", event.currentTarget.textContent);
   };
 
   const titleChanged = (event) => {
+    update("title", event.currentTarget.textContent);
+  };
+
+  const update = (propertyName, newValue) => {
     let todo = todoStore.selectedTodo;
 
     todoStore.update({
       ...todo,
-      title: event.currentTarget.textContent,
+      [propertyName]: newValue,
     });
   };
 
