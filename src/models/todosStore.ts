@@ -28,8 +28,6 @@ export const TodosStore = types
         description: todo.description ? todo.description : "",
       }));
 
-      console.log(111);
-
       self.todos = newTodos;
     }),
     addTodo: flow(function* (todo) {
@@ -53,8 +51,13 @@ export const TodosStore = types
         return;
       }
 
-      let todo = self.todos.find((todo) => todo.id === updatedTodo.id);
-      todo = { ...updatedTodo };
+      console.log(updatedTodo);
+
+      let todoIndex = self.todos.findIndex(
+        (todo) => todo.id === updatedTodo.id
+      );
+
+      self.todos[todoIndex] = { ...updatedTodo };
     }),
     fetchDelete: flow(function* (id) {
       const response = yield axios.delete(`${BASE_URL}todos\\${id}`);
