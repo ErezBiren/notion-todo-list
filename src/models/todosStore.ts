@@ -1,105 +1,83 @@
-import { types, destroy } from "mobx-state-tree";
-import axios from 'axios';
+import { types, destroy, flow } from "mobx-state-tree";
+import axios from "axios";
 
-const BASE_URL = 'http://localhost:3000/';
+const BASE_URL = "http://localhost:3000/";
 
-export const TodoModel = types
-    .model("Todo", {
-        id: types.string,
-        title: types.string,
-        description: "",
-        finished: false
-    })
-    .actions(store => ({
-        toggle() {
-            store.finished = !store.finished;
-        }
-    }));
+export const TodoModel = types.model("TodoModel", {
+  id: types.identifier,
+  title: "",
+  description: "",
+});
 
 export const TodosStore = types
-    .model("TodoStore", {
-        todos: types.array(TodoModel),
-        selectedTodoId: types.maybeNull(types.string)
-    })
-    .views(store => ({
-        selectedTodo() {
-            return store.todos.find(todo => todo.id === store.selectedTodoId);
-        }
-    }
-    ))
-    .actions(store => ({
-        setTodos(newTodos) {
-            store.todos = newTodos;
-        },
-        async fetchTodos() {
-            const response = await axios.get(`${BASE_URL}todos`);
-            const data = await response.data;
+  .model("TodoStore", {
+    todos: types.array(TodoModel),
+    selectedTodo: types.safeReference(TodoModel),
+  })
+  .actions((self) => ({
+    setSelectedTodo(id) {
+      self.selectedTodo = self.todos.find((todo) => todo.id === id);
+    },
+    fetchTodos: flow(function* () {
+      const response = yield axios.get(`${BASE_URL}todos`);
+      const data = response.data;
 
-            const newTodos = data.map(todo => ({
-                id: todo.id,
-                title: todo.title,
-                description: todo.description ? todo.description : ""
-            }))
-            store.setTodos(newTodos);
-        },
-        async addTodo(todo) {
+      const newTodos = data.map((todo) => ({
+        id: todo.id,
+        title: todo.title,
+        description: todo.description ? todo.description : "",
+      }));
 
-            const response = await axios.post(`${BASE_URL}todos/`, todo);
+      console.log(111);
 
-            if (response.status !== 201) {
-                alert("add failed");
-                return;
-            }
+      self.todos = newTodos;
+    }),
+    addTodo: flow(function* (todo) {
+      const response = yield axios.post(`${BASE_URL}todos/`, todo);
 
-            store.addTodoToStore(todo);
-        },
-        addTodoToStore(todo) {
-            store.todos.push(todo);
-        },
-        setSelectedTodo(id): void {
-            store.selectedTodoId = id;
-        },
-        async update(updatedTodo) {
+      if (response.status !== 201) {
+        alert("add failed");
+        return;
+      }
 
-            const response = await axios.put(`${BASE_URL}todos\\${updatedTodo.id}`, updatedTodo)
+      self.todos.push(todo);
+    }),
+    update: flow(function* (updatedTodo) {
+      const response = yield axios.put(
+        `${BASE_URL}todos\\${updatedTodo.id}`,
+        updatedTodo
+      );
 
-            if (response.status != 200) {
-                alert("update failed");
-                return;
-            }
+      if (response.status != 200) {
+        alert("update failed");
+        return;
+      }
 
-            store.updateTodoInStore(updatedTodo);
-        },
-        updateTodoInStore(updatedTodo) {
-            let todo = store.todos.find(todo => todo.id === updatedTodo.id);
-            todo = { ...updatedTodo };
-        },
-        async fetchDelete(id) {
+      let todo = self.todos.find((todo) => todo.id === updatedTodo.id);
+      todo = { ...updatedTodo };
+    }),
+    fetchDelete: flow(function* (id) {
+      const response = yield axios.delete(`${BASE_URL}todos\\${id}`);
 
-            const response = await axios.delete(`${BASE_URL}todos\\${id}`);
+      console.log(response.status);
 
-            console.log(response.status);
+      if (response.status !== 200) {
+        alert("delete failed");
+        return;
+      }
 
-            if (response.status !== 200) {
-                alert("delete failed");
-                return;
-            }
-
-            store.deleteTodoFromStore(id);
-        },
-        deleteTodoFromStore(id) {
-            const todo = store.todos.find(todo => todo.id === id);
-            if (todo) destroy(todo);
-        }
-    }));
+      const todo = self.todos.find((todo) => todo.id === id);
+      if (todo) destroy(todo);
+    }),
+  }));
 
 let todosStore;
 export const useTodosStore = () => {
-    if (!todosStore)
-        todosStore = TodosStore.create({
-            todos: [],
-            selectedTodoId: "",
-        });
+  if (!todosStore)
+    todosStore = TodosStore.create({
+      todos: [],
+      selectedTodo: undefined,
+    });
 
-    return todosStore;
+  return todosStore;
 };
