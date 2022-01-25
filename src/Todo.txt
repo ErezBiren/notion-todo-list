@@ -1,0 +1,3 @@
+// support saving enters in the text
+// go back to the previous caret
+// after enter key on an item insert new item and don't add new one to the end
