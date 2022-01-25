@@ -3,7 +3,6 @@ import classes from "./App.module.css";
 import Card from "./components/card/card";
 import TodoDetails from "./components/todoDetails/todoDetails";
 import TodoList from "./components/todoList/todoList";
-import { onSnapshot } from "mobx-state-tree";
 import { useTodosStore } from "./models/todosStore";
 
 function App() {
@@ -18,10 +17,6 @@ function App() {
   const handleClose = () => {
     setShowDetails(false);
   };
-
-  onSnapshot(todosStore, (snapshot) => {
-    //console.dir(snapshot);
-  });
 
   return (
     <div className={classes.main}>
