@@ -25,10 +25,10 @@ const TodoItem = ({
   const lblRef = useRef(null);
 
   useEffect(() => {
-    tinykeys(lblRef.current, {
+    return tinykeys(lblRef.current, {
       Backspace: () => {
         console.log(lblRef.current);
-        if (lblRef.current.innerText == "") {
+        if (lblRef.current.innerText === "") {
           handleDelete(todoItem.id);
         }
       },
@@ -67,7 +67,7 @@ const TodoItem = ({
         <label contentEditable ref={lblRef} onInput={handleChange}>
           {todoItem.title}
         </label>
-        {todoItem.description != "" && <DetailsIcon></DetailsIcon>}
+        {todoItem.description != "" && <DetailsIcon />}
       </div>
     </div>
   );

@@ -23,12 +23,12 @@ function App() {
       <div className={classes.master}>
         <Card title="My Todo List">
           <div>
-            <TodoList></TodoList>
+            <TodoList />
           </div>
         </Card>
       </div>
-      {showDetails && <div className={classes.splitter}></div>}
-      {showDetails && <TodoDetails handleClose={handleClose}></TodoDetails>}
+      {showDetails && <div className={classes.splitter} />}
+      {showDetails && <TodoDetails handleClose={handleClose} />}
     </div>
   );
 }
