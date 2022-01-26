@@ -1,0 +1,29 @@
+.root{
+  display: flex;
+  gap:10px;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.text {
+  color: #07d;
+  font-size: 1.5rem;
+}
+
+.saveAnimation {
+  animation: spinner;
+  box-sizing: border-box;
+  width: 20px;
+  height: 20px;
+  border: 2px solid transparent;
+  border-top-color: #07d;
+  border-bottom-color: #07d;
+  animation: spinner 0.8s ease infinite;
+}
+
+@keyframes spinner {
+  to {
+    transform: rotate(360deg);
+  }
+}

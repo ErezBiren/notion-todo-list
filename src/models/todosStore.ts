@@ -13,12 +13,16 @@ export const TodosStore = types
   .model("TodoStore", {
     todos: types.array(TodoModel),
     selectedTodo: types.safeReference(TodoModel),
+    showSaveSpinner: false,
   })
   .actions((self) => ({
     setSelectedTodo(id) {
       self.selectedTodo = self.todos.find((todo) => todo.id === id);
     },
     fetchTodos: flow(function* () {
+
+      self.showSaveSpinner = true;
+
       const response = yield axios.get(`${BASE_URL}todos`);
       const data = response.data;
 
@@ -29,8 +33,13 @@ export const TodosStore = types
       }));
 
       self.todos = newTodos;
+
+      self.showSaveSpinner = false;
     }),
     addTodo: flow(function* (todo) {
+
+      self.showSaveSpinner = true;
+
       const response = yield axios.post(`${BASE_URL}todos/`, todo);
 
       if (response.status !== 201) {
@@ -39,8 +48,13 @@ export const TodosStore = types
       }
 
       self.todos.push(todo);
+
+      self.showSaveSpinner = false;
     }),
     insertTodo: flow(function* (todo, index) {
+
+      self.showSaveSpinner = true;
+
       const response = yield axios.post(`${BASE_URL}todos/`, todo);
 
       if (response.status !== 201) {
@@ -49,8 +63,13 @@ export const TodosStore = types
       }
 
       self.todos.splice(index, 0, todo);
+
+      self.showSaveSpinner = false;
     }),
     update: flow(function* (updatedTodo) {
+
+      self.showSaveSpinner = true;
+
       const response = yield axios.put(
         `${BASE_URL}todos\\${updatedTodo.id}`,
         updatedTodo
@@ -66,8 +85,14 @@ export const TodosStore = types
       );
 
       self.todos[todoIndex] = { ...updatedTodo };
+
+      self.showSaveSpinner = false;
+
     }),
     fetchDelete: flow(function* (id) {
+
+      self.showSaveSpinner = true;
+
       const response = yield axios.delete(`${BASE_URL}todos\\${id}`);
 
       if (response.status !== 200) {
@@ -77,6 +102,8 @@ export const TodosStore = types
 
       const todo = self.todos.find((todo) => todo.id === id);
       if (todo) destroy(todo);
+
+      self.showSaveSpinner = false;
     }),
   }));
 
