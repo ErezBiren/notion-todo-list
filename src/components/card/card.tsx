@@ -6,17 +6,17 @@ interface CardProps {
   handleClose?: () => void;
   showCloseButton?: boolean;
   children: React.ReactNode;
-  title: string;
+  title?: string;
   titleContent?: React.ReactNode;
 }
 
-const Card = ({
+const Card: React.FC<CardProps> = ({
   title,
   titleContent,
   children,
   showCloseButton,
   handleClose,
-}: CardProps) => {
+}) => {
   return (
     <div className={classes.root}>
       {titleContent}
