@@ -61,8 +61,6 @@ export const TodosStore = types
         return;
       }
 
-      console.log(updatedTodo);
-
       let todoIndex = self.todos.findIndex(
         (todo) => todo.id === updatedTodo.id
       );
@@ -71,8 +69,6 @@ export const TodosStore = types
     }),
     fetchDelete: flow(function* (id) {
       const response = yield axios.delete(`${BASE_URL}todos\\${id}`);
-
-      console.log(response.status);
 
       if (response.status !== 200) {
         alert("delete failed");
