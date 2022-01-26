@@ -34,14 +34,3 @@ function App() {
 }
 
 export default App;
-
-/*
-{
-  "todos": [
-    { "id": "1", "title": "Feed dog"},
-    { "id": "2", "title":"Go for walk"},
-    { "id": "3", "title":"Write essay", "description": "-electric /n -water" },
-    { "id": "4", "title":"Write essay" }
-  ]
-}
-*/
