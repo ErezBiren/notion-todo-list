@@ -9,7 +9,7 @@ const DELAY_BEFORE_DELETE = 1500;
 
 interface TodoItemProps {
   todoItem: any;
-  handleDelete?: (id: string) => void;
+  handleDelete?: (id: string, index: number) => void;
   handleSelected?: (id: string) => void;
   handleInsert?: (index: number) => void;
   listRef: React.ReactNode;
@@ -31,18 +31,16 @@ const TodoItem = ({
   useEffect(() => {
     return tinykeys(lblRef.current, {
       Backspace: () => {
-        console.log(lblRef.current);
         if (lblRef.current.innerText === "") {
-          handleDelete(todoItem.id);
+          const currentIndex = getCurrentIndex();
+          handleDelete(todoItem.id, currentIndex - 1);
         }
       },
       Enter: (event) => {
         event.preventDefault();
 
-        const li = currentItemRef.current.closest("li");
-        const childrenArray = [...listRef.current.children];
-        const index = childrenArray.indexOf(li);
-        handleInsert(index + 1);
+        const currentIndex = getCurrentIndex();
+        handleInsert(currentIndex + 1);
       },
     });
   }, []);
@@ -51,8 +49,16 @@ const TodoItem = ({
     setShow(false);
 
     setTimeout(() => {
-      handleDelete(todoItem.id);
+      const currentIndex = getCurrentIndex();
+      handleDelete(todoItem.id, currentIndex - 1);
     }, DELAY_BEFORE_DELETE);
+  };
+
+  const getCurrentIndex = () => {
+    const li = currentItemRef.current.closest("li");
+    const childrenArray = [...listRef.current.children];
+    const index = childrenArray.indexOf(li);
+    return index;
   };
 
   const HandleClick = () => {
@@ -70,7 +76,12 @@ const TodoItem = ({
         className={`${classes.listIem} ${!isShow && classes.listIemDeleted}`}
       >
         <input type="checkbox" onChange={handleDoneCheckbox}></input>
-        <label contentEditable ref={lblRef} onInput={handleChange}>
+        <label
+          contentEditable
+          suppressContentEditableWarning={true}
+          ref={lblRef}
+          onInput={handleChange}
+        >
           {todoItem.title}
         </label>
         {todoItem.description != "" && <DetailsIcon />}
