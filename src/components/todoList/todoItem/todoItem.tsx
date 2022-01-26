@@ -4,24 +4,28 @@ import tinykeys from "tinykeys";
 import DetailsIcon from "../../../assets/details.svg?component";
 import { useTodosStore } from "../../../models/todosStore";
 import { observer } from "mobx-react";
-import { v4 as uuidv4 } from "uuid";
 
 const DELAY_BEFORE_DELETE = 1500;
 
 interface TodoItemProps {
   todoItem: any;
-  handleDelete?: (string) => void;
-  handleSelected?: (string) => void;
+  handleDelete?: (id: string) => void;
+  handleSelected?: (id: string) => void;
+  handleInsert?: (index: number) => void;
+  listRef: React.ReactNode;
 }
 
 const TodoItem = ({
   todoItem,
   handleDelete,
   handleSelected,
+  handleInsert,
+  listRef,
 }: TodoItemProps) => {
   const [isShow, setShow] = React.useState(true);
   const todoStore = useTodosStore();
 
+  const currentItemRef = useRef();
   const lblRef = useRef(null);
 
   useEffect(() => {
@@ -35,8 +39,10 @@ const TodoItem = ({
       Enter: (event) => {
         event.preventDefault();
 
-        const newTodo = { id: uuidv4(), title: "" };
-        todoStore.addTodo(newTodo);
+        const li = currentItemRef.current.closest("li");
+        const childrenArray = [...listRef.current.children];
+        const index = childrenArray.indexOf(li);
+        handleInsert(index + 1);
       },
     });
   }, []);
@@ -58,7 +64,7 @@ const TodoItem = ({
   };
 
   return (
-    <div className={`${!isShow && classes.hidden}`}>
+    <div className={`${!isShow && classes.hidden}`} ref={currentItemRef}>
       <div
         onClick={HandleClick}
         className={`${classes.listIem} ${!isShow && classes.listIemDeleted}`}
