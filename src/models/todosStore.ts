@@ -40,6 +40,16 @@ export const TodosStore = types
 
       self.todos.push(todo);
     }),
+    insertTodo: flow(function* (todo, index) {
+      const response = yield axios.post(`${BASE_URL}todos/`, todo);
+
+      if (response.status !== 201) {
+        alert("add failed");
+        return;
+      }
+
+      self.todos.splice(index, 0, todo);
+    }),
     update: flow(function* (updatedTodo) {
       const response = yield axios.put(
         `${BASE_URL}todos\\${updatedTodo.id}`,
