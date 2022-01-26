@@ -31,7 +31,11 @@ const TodoDetails = ({ handleClose }) => {
         showCloseButton
         handleClose={handleClose}
         titleContent={
-          <h2 contentEditable onInput={titleChanged}>
+          <h2
+            contentEditable
+            suppressContentEditableWarning={true}
+            onInput={titleChanged}
+          >
             {todoStore.selectedTodo?.title}
           </h2>
         }
