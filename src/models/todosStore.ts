@@ -20,7 +20,6 @@ export const TodosStore = types
       self.selectedTodo = self.todos.find((todo) => todo.id === id);
     },
     fetchTodos: flow(function* () {
-
       self.showSaveSpinner = true;
 
       const response = yield axios.get(`${BASE_URL}todos`);
@@ -37,8 +36,10 @@ export const TodosStore = types
       self.showSaveSpinner = false;
     }),
     addTodo: flow(function* (todo) {
-
       self.showSaveSpinner = true;
+
+      //simulate delay
+      //yield new Promise((resolve) => setTimeout(resolve, 1000));
 
       const response = yield axios.post(`${BASE_URL}todos/`, todo);
 
@@ -52,7 +53,6 @@ export const TodosStore = types
       self.showSaveSpinner = false;
     }),
     insertTodo: flow(function* (todo, index) {
-
       self.showSaveSpinner = true;
 
       const response = yield axios.post(`${BASE_URL}todos/`, todo);
@@ -67,7 +67,6 @@ export const TodosStore = types
       self.showSaveSpinner = false;
     }),
     update: flow(function* (updatedTodo) {
-
       self.showSaveSpinner = true;
 
       const response = yield axios.put(
@@ -87,10 +86,8 @@ export const TodosStore = types
       self.todos[todoIndex] = { ...updatedTodo };
 
       self.showSaveSpinner = false;
-
     }),
     fetchDelete: flow(function* (id) {
-
       self.showSaveSpinner = true;
 
       const response = yield axios.delete(`${BASE_URL}todos\\${id}`);
