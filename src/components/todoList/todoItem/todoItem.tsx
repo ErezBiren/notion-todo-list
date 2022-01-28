@@ -1,9 +1,10 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import classes from "./TodoItem.module.css";
 import tinykeys from "tinykeys";
 import DetailsIcon from "../../../assets/details.svg?component";
 import { useTodosStore } from "../../../models/todosStore";
 import { observer } from "mobx-react";
+import { useEditable } from "use-editable";
 
 const DELAY_BEFORE_DELETE = 1500;
 
@@ -25,13 +26,13 @@ const TodoItem = ({
   const [isShow, setShow] = React.useState(true);
   const todoStore = useTodosStore();
 
-  const currentItemRef = useRef();
-  const lblRef = useRef(null);
+  const currentItemRef = useRef(null);
+  const titleRef = useRef(null);
 
   useEffect(() => {
-    return tinykeys(lblRef.current, {
+    return tinykeys(titleRef.current, {
       Backspace: () => {
-        if (lblRef.current.innerText === "") {
+        if (titleRef.current.innerText === "") {
           const currentIndex = getCurrentIndex();
           handleDelete(todoItem.id, currentIndex - 1);
         }
@@ -65,9 +66,19 @@ const TodoItem = ({
     handleSelected(todoItem.id);
   };
 
-  const handleChange = (event) => {
-    todoStore.update({ ...todoItem, title: event.currentTarget.textContent });
-  };
+  // title
+  const [title, setTitle] = useState();
+
+  const onTitleChange = useCallback((title) => {
+    todoStore.update({ ...todoItem, title });
+    setTitle(title.slice(0, -1));
+  }, []);
+
+  useEditable(titleRef, onTitleChange, { indentation: 2 });
+
+  useEffect(() => {
+    setTitle(todoStore?.selectedTodo?.title);
+  }, [todoStore?.selectedTodo, todoStore?.selectedTodo?.title]);
 
   return (
     <div className={`${!isShow && classes.hidden}`} ref={currentItemRef}>
@@ -76,14 +87,7 @@ const TodoItem = ({
         className={`${classes.listIem} ${!isShow && classes.listIemDeleted}`}
       >
         <input type="checkbox" onChange={handleDoneCheckbox}></input>
-        <label
-          contentEditable
-          suppressContentEditableWarning={true}
-          ref={lblRef}
-          onInput={handleChange}
-        >
-          {todoItem.title}
-        </label>
+        <div ref={titleRef}>{todoItem.title}</div>
         {todoItem.description != "" && <DetailsIcon />}
       </div>
     </div>
