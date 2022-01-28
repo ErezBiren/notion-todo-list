@@ -1,3 +1,4 @@
+import { observer } from "mobx-react";
 import React from "react";
 import classes from "./saveSpinner.module.css";
 import { useTodosStore } from "../../models/todosStore";
@@ -17,4 +18,4 @@ const SaveSpinner = () => {
   );
 };
 
-export default SaveSpinner;
+export default observer(SaveSpinner);
