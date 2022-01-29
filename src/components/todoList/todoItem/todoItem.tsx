@@ -5,6 +5,7 @@ import DetailsIcon from "../../../assets/details.svg?component";
 import { useTodosStore } from "../../../models/todosStore";
 import { observer } from "mobx-react";
 import { useEditable } from "use-editable";
+import { debounce } from "lodash";
 
 const DELAY_BEFORE_DELETE = 1500;
 
@@ -27,7 +28,6 @@ const TodoItem = ({
   const todoStore = useTodosStore();
 
   const currentItemRef = useRef(null);
-  const titleRef = useRef(null);
 
   useEffect(() => {
     return tinykeys(titleRef.current, {
@@ -68,17 +68,24 @@ const TodoItem = ({
 
   // title
   const [title, setTitle] = useState();
+  const titleRef = useRef(null);
 
-  const onTitleChange = useCallback((title) => {
-    todoStore.update({ ...todoItem, title });
-    setTitle(title.slice(0, -1));
-  }, []);
+  const debouncedUpdateTitle = useRef(
+    debounce((text: string) => {
+      todoStore.update({ ...todoItem, title: text });
+    }, 500)
+  );
 
-  useEditable(titleRef, onTitleChange, { indentation: 2 });
+  const onTitleChange = (text: string) => {
+    setTitle(text.slice(0, -1));
+    debouncedUpdateTitle.current(text);
+  };
+
+  useEditable(titleRef, onTitleChange);
 
   useEffect(() => {
-    setTitle(todoStore?.selectedTodo?.title);
-  }, [todoStore?.selectedTodo, todoStore?.selectedTodo?.title]);
+    setTitle(todoItem.title);
+  }, [todoItem, todoItem.title]);
 
   return (
     <div className={`${!isShow && classes.hidden}`} ref={currentItemRef}>
@@ -87,7 +94,7 @@ const TodoItem = ({
         className={`${classes.listIem} ${!isShow && classes.listIemDeleted}`}
       >
         <input type="checkbox" onChange={handleDoneCheckbox}></input>
-        <div ref={titleRef}>{todoItem.title}</div>
+        <div ref={titleRef}>{title}</div>
         {todoItem.description != "" && <DetailsIcon />}
       </div>
     </div>
