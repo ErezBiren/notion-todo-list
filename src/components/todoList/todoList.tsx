@@ -24,8 +24,9 @@ const TodoList = () => {
     const focusedElement = childrenArray[focusIndex];
     if (!focusedElement) return;
 
-    const inputLabel = focusedElement.getElementsByTagName("label")[0];
+    const inputLabel = focusedElement.querySelector("#titleDiv");
     if (!inputLabel) return;
+
     inputLabel.focus();
   };
 

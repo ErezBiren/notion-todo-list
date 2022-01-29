@@ -93,14 +93,16 @@ const TodoItem = ({
   }, [todoStore, todoStore?.selectedTodo]);
 
   return (
-    <div className={`${!isShow && classes.hidden}`} ref={currentItemRef}>
+    <div className={`${!isShow ? classes.hidden : ""}`} ref={currentItemRef}>
       <div
         onClick={HandleClick}
         className={`${classes.listIem} ${!isShow && classes.listIemDeleted} 
         ${isSelected && classes.selected}`}
       >
         <input type="checkbox" onChange={handleDoneCheckbox}></input>
-        <div ref={titleRef}>{title}</div>
+        <div id="titleDiv" ref={titleRef}>
+          {title}
+        </div>
         {todoItem.description != "" && <DetailsIcon />}
       </div>
     </div>

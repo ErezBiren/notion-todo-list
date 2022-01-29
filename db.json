@@ -2,8 +2,8 @@
   "todos": [
     {
       "id": "e0190f43-01e6-4bcc-b86a-0314e3b457b4",
-      "title": "this is not anymore\n",
-      "description": "i love gal\ni am the most\n"
+      "title": "fix focus when delete an item\n",
+      "description": "when we delete an item\nwe shold move the focus to the\nother line\n"
     },
     {
       "id": "efe7b83b-f7f5-4802-b65b-06f11ddaf635",
