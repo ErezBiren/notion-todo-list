@@ -8,12 +8,16 @@ const SaveSpinner = () => {
 
   return (
     <>
-      {todoStore.showSaveSpinner && (
-        <div className={classes.root}>
+      {
+        <div
+          className={`${classes.root} ${
+            todoStore.showSaveSpinner ? "" : classes.hidden
+          }`}
+        >
           <div className={classes.saveAnimation} />
           <label className={classes.text}>Saving ...</label>
         </div>
-      )}
+      }
     </>
   );
 };

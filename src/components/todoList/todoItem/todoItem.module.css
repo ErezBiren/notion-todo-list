@@ -16,9 +16,13 @@
   cursor: pointer;
 }
 
-.listIem:hover {
-  background: #dfe6ed;
+.selected {
+  background-color: #e8ecf069;
 }
+
+/* .listIem:hover {
+  background: #e8ecf0;
+} */
 
 .listIem input {
   border: 2 solid #dfe6ed;

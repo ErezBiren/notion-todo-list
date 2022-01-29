@@ -25,6 +25,7 @@ const TodoItem = ({
   listRef,
 }: TodoItemProps) => {
   const [isShow, setShow] = React.useState(true);
+  const [isSelected, setIsSelected] = React.useState(false);
   const todoStore = useTodosStore();
 
   const currentItemRef = useRef(null);
@@ -87,11 +88,16 @@ const TodoItem = ({
     setTitle(todoItem.title);
   }, [todoItem, todoItem.title]);
 
+  useEffect(() => {
+    setIsSelected(todoStore?.selectedTodo?.id === todoItem?.id);
+  }, [todoStore, todoStore?.selectedTodo]);
+
   return (
     <div className={`${!isShow && classes.hidden}`} ref={currentItemRef}>
       <div
         onClick={HandleClick}
-        className={`${classes.listIem} ${!isShow && classes.listIemDeleted}`}
+        className={`${classes.listIem} ${!isShow && classes.listIemDeleted} 
+        ${isSelected && classes.selected}`}
       >
         <input type="checkbox" onChange={handleDoneCheckbox}></input>
         <div ref={titleRef}>{title}</div>
