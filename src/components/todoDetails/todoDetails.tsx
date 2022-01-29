@@ -61,17 +61,15 @@ const TodoDetails = ({ handleClose }) => {
   };
 
   return (
-    <div className={classes.detail}>
-      <Card
-        showCloseButton
-        handleClose={handleClose}
-        titleContent={<h2 ref={titleRef}>{title}</h2>}
-      >
-        <div ref={descriptionRef} className={classes.detailsEditor}>
-          {description}
-        </div>
-      </Card>
-    </div>
+    <Card
+      showCloseButton
+      handleClose={handleClose}
+      titleContent={<h2 ref={titleRef}>{title}</h2>}
+    >
+      <div ref={descriptionRef} className={classes.detailsEditor}>
+        {description}
+      </div>
+    </Card>
   );
 };
 

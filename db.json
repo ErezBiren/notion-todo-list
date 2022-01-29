@@ -1,22 +1,14 @@
 {
   "todos": [
     {
-      "id": "0c08833d-35e4-4088-bcef-320918d3eb0f",
-      "title": "call marina after evening\n",
-      "description": "i am the most\n"
-    },
-    {
       "id": "e0190f43-01e6-4bcc-b86a-0314e3b457b4",
       "title": "this is not anymore\n",
       "description": "i love gal\ni am the most\n"
     },
     {
       "id": "efe7b83b-f7f5-4802-b65b-06f11ddaf635",
-      "title": ""
-    },
-    {
-      "id": "2c8e9a2b-3028-4e1d-afd7-24186f6ce0b8",
-      "title": ""
+      "title": "i am the best\n",
+      "description": ""
     }
   ]
 }

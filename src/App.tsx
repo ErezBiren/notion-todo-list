@@ -5,6 +5,7 @@ import SaveSpinner from "./components/saveSpinner/saveSpinner";
 import TodoDetails from "./components/todoDetails/todoDetails";
 import TodoList from "./components/todoList/todoList";
 import { useTodosStore } from "./models/todosStore";
+import { observer } from "mobx-react";
 
 function App() {
   const [showDetails, setShowDetails] = useState(true);
@@ -14,6 +15,10 @@ function App() {
   useEffect(() => {
     todosStore.fetchTodos();
   }, [todosStore]);
+
+  useEffect(() => {
+    setShowDetails(true);
+  }, [todosStore?.selectedTodo]);
 
   const handleClose = () => {
     setShowDetails(false);
@@ -30,11 +35,15 @@ function App() {
             </div>
           </Card>
         </div>
-        {showDetails && <div className={classes.splitter} />}
-        {showDetails && <TodoDetails handleClose={handleClose} />}
+        <div
+          className={`${classes.splitter} ${!showDetails && classes.hidden}`}
+        />
+        <div className={`${classes.details} ${!showDetails && classes.hidden}`}>
+          <TodoDetails handleClose={handleClose} />
+        </div>
       </div>
     </div>
   );
 }
 
-export default App;
+export default observer(App);
