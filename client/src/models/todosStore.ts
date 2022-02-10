@@ -1,7 +1,11 @@
 import { types, destroy, flow } from "mobx-state-tree";
 import axios from "axios";
+import { io } from "socket.io-client"
 
 const BASE_URL = "http://localhost:3000/";
+
+const socket = io(BASE_URL);
+
 
 export const TodoModel = types.model("TodoModel", {
   id: types.identifier,
