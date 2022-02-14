@@ -6,6 +6,15 @@ const BASE_URL = "http://localhost:3000/";
 
 const socket = io(BASE_URL);
 
+let id;
+
+socket.on("connect", () => {
+  id = socket.id;
+})
+
+socket.on("fetch", newTodos => {
+  todosStore?.setTodos(newTodos);
+});
 
 export const TodoModel = types.model("TodoModel", {
   id: types.identifier,
@@ -23,39 +32,13 @@ export const TodosStore = types
     setSelectedTodo(id) {
       self.selectedTodo = self.todos.find((todo) => todo.id === id);
     },
-    fetchTodos: flow(function* () {
-      self.showSaveSpinner = true;
-
-      const response = yield axios.get(`${BASE_URL}todos`);
-      const data = response.data;
-
-      const newTodos = data.map((todo) => ({
-        id: todo.id,
-        title: todo.title,
-        description: todo.description ? todo.description : "",
-      }));
-
+    setTodos(newTodos) {
       self.todos = newTodos;
-
-      self.showSaveSpinner = false;
-    }),
-    addTodo: flow(function* (todo) {
-      self.showSaveSpinner = true;
-
-      //simulate delay
-      //yield new Promise((resolve) => setTimeout(resolve, 1000));
-
-      const response = yield axios.post(`${BASE_URL}todos/`, todo);
-
-      if (response.status !== 201) {
-        alert("add failed");
-        return;
-      }
+    },
+    addTodo(todo) {
 
       self.todos.push(todo);
-
-      self.showSaveSpinner = false;
-    }),
+    },
     insertTodo: flow(function* (todo, index) {
       self.showSaveSpinner = true;
 
@@ -70,42 +53,22 @@ export const TodosStore = types
 
       self.showSaveSpinner = false;
     }),
-    update: flow(function* (updatedTodo) {
-      self.showSaveSpinner = true;
+    update(updatedTodo) {
 
-      const response = yield axios.put(
-        `${BASE_URL}todos\\${updatedTodo.id}`,
-        updatedTodo
-      );
-
-      if (response.status != 200) {
-        alert("update failed");
-        return;
-      }
+      socket.emit("update", updatedTodo);
 
       let todoIndex = self.todos.findIndex(
         (todo) => todo.id === updatedTodo.id
       );
-
       self.todos[todoIndex] = { ...updatedTodo };
-
-      self.showSaveSpinner = false;
-    }),
-    fetchDelete: flow(function* (id) {
-      self.showSaveSpinner = true;
-
-      const response = yield axios.delete(`${BASE_URL}todos\\${id}`);
-
-      if (response.status !== 200) {
-        alert("delete failed");
-        return;
-      }
-
+    },
+    fetchDelete(id) {
       const todo = self.todos.find((todo) => todo.id === id);
-      if (todo) destroy(todo);
 
-      self.showSaveSpinner = false;
-    }),
+      socket.emit("delete", todo.id);
+
+      if (todo) destroy(todo);
+    },
   }));
 
 let todosStore;
