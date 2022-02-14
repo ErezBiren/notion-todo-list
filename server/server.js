@@ -21,6 +21,11 @@ io.on("connection", (socket) => {
     saveToDB();
   });
 
+  socket.on("insert", (todo, index) => {
+    todos.splice(index, 0, todo);
+    saveToDB();
+  });
+
   socket.on("update", (updatedTodo) => {
     let todoIndex = todos.findIndex((todo) => todo.id === updatedTodo.id);
 

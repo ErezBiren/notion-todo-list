@@ -36,27 +36,15 @@ export const TodosStore = types
       self.todos = newTodos;
     },
     addTodo(todo) {
-
+      socket.emit("add", todo);
       self.todos.push(todo);
     },
-    insertTodo: flow(function* (todo, index) {
-      self.showSaveSpinner = true;
-
-      const response = yield axios.post(`${BASE_URL}todos/`, todo);
-
-      if (response.status !== 201) {
-        alert("add failed");
-        return;
-      }
-
+    insertTodo(todo, index) {
+      socket.emit("insert", todo, index);
       self.todos.splice(index, 0, todo);
-
-      self.showSaveSpinner = false;
-    }),
+    },
     update(updatedTodo) {
-
       socket.emit("update", updatedTodo);
-
       let todoIndex = self.todos.findIndex(
         (todo) => todo.id === updatedTodo.id
       );
@@ -64,9 +52,7 @@ export const TodosStore = types
     },
     fetchDelete(id) {
       const todo = self.todos.find((todo) => todo.id === id);
-
       socket.emit("delete", todo.id);
-
       if (todo) destroy(todo);
     },
   }));
