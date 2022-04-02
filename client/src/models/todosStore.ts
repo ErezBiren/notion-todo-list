@@ -51,7 +51,7 @@ export const TodosStore = types
       );
       self.todos[todoIndex] = { ...updatedTodo };
     },
-    fetchDelete(id) {
+    delete(id) {
       const todo = self.todos.find((todo) => todo.id === id);
       socket.emit("delete", todo.id);
       if (todo) destroy(todo);
