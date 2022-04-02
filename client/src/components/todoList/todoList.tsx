@@ -30,9 +30,8 @@ const TodoList = () => {
     inputLabel.focus();
   };
 
-  const handleDeleteItem = (todoID: string, index: number) => {
+  const handleDeleteItem = (todoID: string) => {
     todoStore.fetchDelete(todoID);
-    setFocusIndex(index);
   };
 
   const handleSelected = (todoID: string) => {
@@ -42,8 +41,8 @@ const TodoList = () => {
   const handleInsert = async (index: number) => {
     const newTodo = { id: uuidv4() };
     await todoStore.insertTodo(newTodo, index);
-    todoStore.setSelectedTodo(newTodo.id);
     setFocusIndex(index);
+    todoStore.setSelectedTodo(newTodo.id);
   };
 
   const handleAddTodo = async () => {
