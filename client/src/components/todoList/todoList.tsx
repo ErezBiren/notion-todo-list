@@ -40,13 +40,14 @@ const TodoList = () => {
   };
 
   const handleInsert = async (index: number) => {
-    const newTodo = { id: uuidv4(), title: "" };
+    const newTodo = { id: uuidv4() };
     await todoStore.insertTodo(newTodo, index);
+    todoStore.setSelectedTodo(newTodo.id);
     setFocusIndex(index);
   };
 
   const handleAddTodo = async () => {
-    const newTodo = { id: uuidv4(), title: "" };
+    const newTodo = { id: uuidv4() };
     await todoStore.addTodo(newTodo);
     setFocusIndex(todoStore.todos.length - 1);
   };
