@@ -31,7 +31,7 @@ const TodoList = () => {
   };
 
   const handleDeleteItem = (todoID: string, index: number) => {
-    todoStore.Delete(todoID);
+    todoStore.delete(todoID)
     setFocusIndex(index);
   };
 
