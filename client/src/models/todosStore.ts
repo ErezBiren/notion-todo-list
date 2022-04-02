@@ -1,5 +1,4 @@
-import { types, destroy, flow } from "mobx-state-tree";
-import axios from "axios";
+import { types, destroy } from "mobx-state-tree";
 import { io } from "socket.io-client"
 
 const BASE_URL = "http://localhost:3000/";
@@ -30,7 +29,9 @@ export const TodosStore = types
   })
   .actions((self) => ({
     setSelectedTodo(id) {
-      self.selectedTodo = self.todos.find((todo) => todo.id === id);
+      
+      const selectedTodo = self.todos.find((todo) => todo.id === id);
+      self.selectedTodo = selectedTodo;
     },
     setTodos(newTodos) {
       self.todos = newTodos;

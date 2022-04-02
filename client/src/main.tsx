@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
-import { TodosStore } from "./models/todosStore";
+//import { TodosStore } from "./models/todosStore";
 
 ReactDOM.render(
   <React.StrictMode>
