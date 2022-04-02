@@ -30,8 +30,9 @@ const TodoList = () => {
     inputLabel.focus();
   };
 
-  const handleDeleteItem = (todoID: string) => {
-    todoStore.fetchDelete(todoID);
+  const handleDeleteItem = (todoID: string, index: number) => {
+    todoStore.Delete(todoID);
+    setFocusIndex(index);
   };
 
   const handleSelected = (todoID: string) => {
