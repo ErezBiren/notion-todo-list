@@ -67,22 +67,21 @@ const TodoItem = ({
     handleSelected(todoItem.id);
   };
 
+  const onTitleChange = (text: string) => {
+    setTitle(text.slice(0, -1));
+    debouncedUpdateTitle.current(text);
+  };
+
   // title
   const [title, setTitle] = useState();
   const titleRef = useRef(null);
+  useEditable(titleRef, onTitleChange);
 
   const debouncedUpdateTitle = useRef(
     debounce((text: string) => {
       todoStore.update({ ...todoItem, title: text });
     }, 500)
   );
-
-  const onTitleChange = (text: string) => {
-    setTitle(text.slice(0, -1));
-    debouncedUpdateTitle.current(text);
-  };
-
-  useEditable(titleRef, onTitleChange);
 
   useEffect(() => {
     setTitle(todoItem.title);

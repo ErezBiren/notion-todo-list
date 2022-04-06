@@ -12,9 +12,9 @@ function App() {
 
   const todosStore = useTodosStore();
 
-  // useEffect(() => {
-  //   todosStore.fetchTodos();
-  // }, [todosStore]);
+  useEffect(() => {
+    todosStore.fetchTodos();
+  }, [todosStore]);
 
   useEffect(() => {
     setShowDetails(true);

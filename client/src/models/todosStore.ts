@@ -1,19 +1,7 @@
-import { types, destroy } from "mobx-state-tree";
-import { io } from "socket.io-client"
+import { types, destroy, flow } from "mobx-state-tree";
+import axios from "axios";
 
 const BASE_URL = "http://localhost:3000/";
-
-const socket = io(BASE_URL);
-
-let id;
-
-socket.on("connect", () => {
-  id = socket.id;
-})
-
-socket.on("fetch", newTodos => {
-  todosStore?.setTodos(newTodos);
-});
 
 export const TodoModel = types.model("TodoModel", {
   id: types.identifier,
@@ -29,33 +17,91 @@ export const TodosStore = types
   })
   .actions((self) => ({
     setSelectedTodo(id) {
-      
-      const selectedTodo = self.todos.find((todo) => todo.id === id);
-      self.selectedTodo = selectedTodo;
+      self.selectedTodo = self.todos.find((todo) => todo.id === id);
     },
-    setTodos(newTodos) {
+    fetchTodos: flow(function* () {
+      self.showSaveSpinner = true;
+
+      const response = yield axios.get(`${BASE_URL}todos`);
+      const data = response.data;
+
+      const newTodos = data.map((todo) => ({
+        id: todo.id,
+        title: todo.title,
+        description: todo.description ? todo.description : "",
+      }));
+
       self.todos = newTodos;
-    },
-    addTodo(todo) {
-      socket.emit("add", todo);
+
+      self.showSaveSpinner = false;
+    }),
+    addTodo: flow(function* (todo) {
+      self.showSaveSpinner = true;
+
+      //simulate delay
+      //yield new Promise((resolve) => setTimeout(resolve, 1000));
+
+      const response = yield axios.post(`${BASE_URL}todos/`, todo);
+
+      if (response.status !== 201) {
+        alert("add failed");
+        return;
+      }
+
       self.todos.push(todo);
-    },
-    insertTodo(todo, index) {
-      socket.emit("insert", todo, index);
+
+      self.showSaveSpinner = false;
+    }),
+    insertTodo: flow(function* (todo, index) {
+      self.showSaveSpinner = true;
+
+      const response = yield axios.post(`${BASE_URL}todos/`, todo);
+
+      if (response.status !== 201) {
+        alert("add failed");
+        return;
+      }
+
       self.todos.splice(index, 0, todo);
-    },
-    update(updatedTodo) {
-      socket.emit("update", updatedTodo);
+
+      self.showSaveSpinner = false;
+    }),
+    update: flow(function* (updatedTodo) {
+      self.showSaveSpinner = true;
+
+      const response = yield axios.put(
+        `${BASE_URL}todos\\${updatedTodo.id}`,
+        updatedTodo
+      );
+
+      if (response.status != 200) {
+        alert("update failed");
+        return;
+      }
+
       let todoIndex = self.todos.findIndex(
         (todo) => todo.id === updatedTodo.id
       );
+
       self.todos[todoIndex] = { ...updatedTodo };
-    },
-    delete(id) {
+
+      self.showSaveSpinner = false;
+    }),
+    delete: flow(function* (id) {
+      self.showSaveSpinner = true;
+
+      const response = yield axios.delete(`${BASE_URL}todos\\${id}`);
+
+      if (response.status !== 200) {
+        alert("delete failed");
+        return;
+      }
+
       const todo = self.todos.find((todo) => todo.id === id);
-      socket.emit("delete", todo.id);
       if (todo) destroy(todo);
-    },
+
+      self.showSaveSpinner = false;
+    }),
   }));
 
 let todosStore;
