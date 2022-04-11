@@ -15,7 +15,7 @@ const SaveSpinner = () => {
           }`}
         >
           <div className={classes.saveAnimation} />
-          <label className={classes.text}>Saving ...</label>
+          <label className={classes.text}>Getting Data ...</label>
         </div>
       }
     </>

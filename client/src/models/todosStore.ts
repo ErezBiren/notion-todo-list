@@ -1,7 +1,23 @@
 import { types, destroy, flow } from "mobx-state-tree";
 import axios from "axios";
 
-const BASE_URL = "http://localhost:3000/";
+const BASE_URL = "http://localhost:3002/";
+
+// //------------------------------------------
+// import { io } from "socket.io-client";
+
+// const socket = io("http://localhost:3003/");
+
+// let id;
+
+// socket.on("connect", () => {
+//   id = socket.id;
+// });
+
+// socket.on("fetch", (newTodos) => {
+//   //todosStore?.setTodos(newTodos);
+// });
+// //---------------------------------------------
 
 export const TodoModel = types.model("TodoModel", {
   id: types.identifier,
@@ -21,9 +37,14 @@ export const TodosStore = types
     },
     fetchTodos: flow(function* () {
       self.showSaveSpinner = true;
-
-      const response = yield axios.get(`${BASE_URL}todos`);
-      const data = response.data;
+      let data;
+      try {
+        const response = yield axios.get(`${BASE_URL}todos`);
+        data = response.data;
+      } catch (error) 
+      {
+        console.error(error);
+      }
 
       const newTodos = data.map((todo) => ({
         id: todo.id,
@@ -37,9 +58,6 @@ export const TodosStore = types
     }),
     addTodo: flow(function* (todo) {
       self.showSaveSpinner = true;
-
-      //simulate delay
-      //yield new Promise((resolve) => setTimeout(resolve, 1000));
 
       const response = yield axios.post(`${BASE_URL}todos/`, todo);
 
